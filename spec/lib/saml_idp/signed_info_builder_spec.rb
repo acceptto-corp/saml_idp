@@ -28,7 +28,7 @@ module SamlIdp
       context 'when provider has a new certificate' do
         before do
           allow_any_instance_of(ServiceProvider).to(
-            receive(:new_cert?).and_return true
+            receive(:new_cert).and_return true
           )
         end
 

@@ -151,7 +151,7 @@ module SamlIdp
     end
 
     def certificate_by_provider
-      if service_provider.new_cert?
+      if service_provider.new_cert
         SamlIdp.config.new_x509_certificate
       else
         SamlIdp.config.x509_certificate

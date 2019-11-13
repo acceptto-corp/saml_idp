@@ -243,13 +243,13 @@ KEY DATA
 -----END RSA PRIVATE KEY-----
 CERT
 ```
-And for providers you pass the attriutes ```new_cert?: true```.
+And for providers you pass the attriutes ```new_cert: true```.
 
 Ex
 ``` ruby
  "https://provider" => {
     cert: NEW_CERT,
-    new_cert?: true
+    new_cert: true
   }
 ```
 

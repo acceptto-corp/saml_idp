@@ -14,7 +14,7 @@ module SamlIdp
     attribute :acs_url
     attribute :assertion_consumer_logout_service_url
     attribute :response_hosts
-    attribute :new_cert?
+    attribute :new_cert
 
     delegate :config, to: :SamlIdp
 

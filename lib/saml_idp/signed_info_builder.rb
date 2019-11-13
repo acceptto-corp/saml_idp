@@ -73,7 +73,7 @@ module SamlIdp
     private :service_provider
 
     def secret_key
-      if service_provider.new_cert?
+      if service_provider.new_cert
         SamlIdp.config.new_secret_key
       else
         SamlIdp.config.secret_key

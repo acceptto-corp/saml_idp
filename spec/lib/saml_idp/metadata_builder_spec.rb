@@ -53,7 +53,7 @@ module SamlIdp
       context 'when the service provider has new certificate' do
         it 'extract new certificate' do
           allow_any_instance_of(ServiceProvider).to(
-            receive(:new_cert?).and_return true
+            receive(:new_cert).and_return true
           )
           expect(subject.x509_certificate.length < 15).to(
             eq(Default::NEW_X509_CERTIFICATE.length < 15)
