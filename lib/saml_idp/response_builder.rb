@@ -52,7 +52,7 @@ module SamlIdp
       builder = Builder::XmlMarkup.new
       builder.tag! "samlp:Response", resp_options do |response|
           response.Issuer issuer_uri, xmlns: Saml::XML::Namespaces::ASSERTION
-          sign response
+          sign response, issuer_uri
           response.tag! "samlp:Status" do |status|
             status.tag! "samlp:StatusCode", Value: Saml::XML::Namespaces::Statuses::SUCCESS
           end
