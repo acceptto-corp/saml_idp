@@ -7,6 +7,7 @@ module SamlIdp
     include Algorithmable
     include Signable
     attr_accessor :configurator
+    attr_accessor :new_cert
 
     def initialize(configurator = SamlIdp.config, new_cert = false)
       self.configurator = configurator
