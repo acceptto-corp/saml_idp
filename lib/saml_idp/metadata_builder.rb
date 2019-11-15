@@ -10,6 +10,7 @@ module SamlIdp
 
     def initialize(configurator = SamlIdp.config, new_cert = false)
       self.configurator = configurator
+      self.new_cert = new_cert
     end
 
     def fresh
