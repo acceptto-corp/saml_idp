@@ -8,7 +8,7 @@ module SamlIdp
     include Signable
     attr_accessor :configurator
 
-    def initialize(configurator = SamlIdp.config)
+    def initialize(configurator = SamlIdp.config, new_cert = false)
       self.configurator = configurator
     end
 
@@ -139,22 +139,15 @@ module SamlIdp
     end
     private :raw_algorithm
 
-    def service_provider
-      @_service_provider ||=
-        ServiceProvider.new(
-          (service_provider_finder[single_service_post_location] || {})
-        )
-    end
-
     def x509_certificate
-      extract_x509_certificate(certificate_by_provider)
+      extract_x509_certificate(get_certificate)
     end
 
-    def certificate_by_provider
-      if service_provider.new_cert
-        SamlIdp.config.new_x509_certificate
+    def get_certificate
+      if new_cert
+        configurator.new_x509_certificate
       else
-        SamlIdp.config.x509_certificate
+        configurator.x509_certificate
       end
     end
 
