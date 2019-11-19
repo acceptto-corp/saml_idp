@@ -26,6 +26,7 @@ module SamlIdp
     end
     let(:signed_response_opts) { true }
     let(:unsigned_response_opts) { false }
+    let(:new_cert) { false }
     let(:subject_encrypted) { described_class.new(reference_id,
                                   response_id,
                                   issuer_uri,
@@ -38,7 +39,8 @@ module SamlIdp
                                   expiry,
                                   encryption_opts,
                                   session_expiry,
-                                  unsigned_response_opts
+                                  unsigned_response_opts,
+                                  new_cert
                                  )
     }
 
@@ -54,7 +56,8 @@ module SamlIdp
                                   expiry,
                                   nil,
                                   session_expiry,
-                                  signed_response_opts
+                                  signed_response_opts,
+                                  new_cert
                                  )
     }
 

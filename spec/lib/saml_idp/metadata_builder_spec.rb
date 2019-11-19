@@ -50,20 +50,18 @@ module SamlIdp
     end
 
     context '#x509_certificate' do
-      context 'when the service provider has new certificate' do
+      context 'when the new cert flag is passed' do
         it 'extract new certificate' do
-          allow_any_instance_of(ServiceProvider).to(
-            receive(:new_cert).and_return true
-          )
+          subject.new_cert = true
           expect(subject.x509_certificate.length < 15).to(
             eq(Default::NEW_X509_CERTIFICATE.length < 15)
           )
         end
       end
 
-      context 'when the service provider does not have a new certificate' do
+      context 'when the new cert flag is not passed' do
         it 'extract default certificate' do
-          subject.configurator.single_service_post_location = nil
+          subject.new_cert = false
           expect(subject.x509_certificate.length < 15).to(
             eq(Default::X509_CERTIFICATE.length < 15)
           )

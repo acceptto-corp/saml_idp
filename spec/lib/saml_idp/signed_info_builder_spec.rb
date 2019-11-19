@@ -4,12 +4,12 @@ module SamlIdp
     let(:reference_id) { "abc" }
     let(:digest) { "em8csGAWynywpe8S4nN64o56/4DosXi2XWMY6RJ6YfA=" }
     let(:algorithm) { :sha256 }
-    let(:audience_uri) { '' }
+    let(:new_cert) { false }
     subject { described_class.new(
       reference_id,
       digest,
       algorithm,
-      audience_uri
+      new_cert
     ) }
 
     before do
@@ -27,9 +27,7 @@ module SamlIdp
     context '#signed' do
       context 'when provider has a new certificate' do
         before do
-          allow_any_instance_of(ServiceProvider).to(
-            receive(:new_cert).and_return true
-          )
+          subject.new_cert = true
         end
 
         it 'return a different signed encoded' do
