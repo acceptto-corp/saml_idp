@@ -3,8 +3,8 @@ module SamlIdp
   class LogoutRequestBuilder < LogoutBuilder
     attr_accessor :name_id
 
-    def initialize(response_id, issuer_uri, saml_slo_url, name_id, algorithm)
-      super(response_id, issuer_uri, saml_slo_url, algorithm)
+    def initialize(response_id, issuer_uri, saml_slo_url, name_id, algorithm, new_cert)
+      super(response_id, issuer_uri, saml_slo_url, algorithm, new_cert)
       self.name_id = name_id
     end
 
@@ -16,7 +16,7 @@ module SamlIdp
         Destination: saml_slo_url,
         "xmlns" => Saml::XML::Namespaces::PROTOCOL do |request|
           request.Issuer issuer_uri, xmlns: Saml::XML::Namespaces::ASSERTION
-          sign request, issuer_uri
+          sign request, new_cert
           request.NameID name_id, xmlns: Saml::XML::Namespaces::ASSERTION,
             Format: Saml::XML::Namespaces::Formats::NameId::PERSISTENT
           request.SessionIndex response_id_string

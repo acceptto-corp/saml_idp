@@ -63,6 +63,7 @@ module SamlIdp
       session_expiry = opts[:session_expiry]
       encryption_opts = opts[:encryption] || nil
       signed_message_opts = opts[:signed_message] || false
+      new_cert = opts[:new_cert] || false
 
       SamlResponse.new(
         reference_id,
@@ -77,7 +78,8 @@ module SamlIdp
         expiry,
         encryption_opts,
         session_expiry,
-        signed_message_opts
+        signed_message_opts,
+        new_cert
       ).build
     end
 
@@ -87,7 +89,8 @@ module SamlIdp
         (opts[:issuer_uri] || issuer_uri),
         saml_logout_url,
         saml_request_id,
-        (opts[:algorithm] || algorithm || default_algorithm)
+        (opts[:algorithm] || algorithm || default_algorithm),
+        opts[:new_cert] || false
       ).signed
     end
 

@@ -1,13 +1,12 @@
 require 'builder'
-require 'saml_idp/service_provider'
 
 module SamlIdp
   class SignatureBuilder
-    attr_accessor :signed_info_builder, :audience_service_provider
+    attr_accessor :signed_info_builder, :new_cert
 
-    def initialize(signed_info_builder, audience_service_provider)
+    def initialize(signed_info_builder, new_cert)
       self.signed_info_builder = signed_info_builder
-      self.audience_service_provider = audience_service_provider
+      self.new_cert = new_cert
     end
 
     def raw
@@ -23,20 +22,13 @@ module SamlIdp
       end
     end
 
-    def service_provider
-      @_service_provider ||=
-        ServiceProvider.new(
-          (service_provider_finder[audience_service_provider] || {})
-        )
-    end
-
     def x509_certificate
-      extract_x509_certificate(certificate_by_provider)
+      extract_x509_certificate(certificate_by_options)
     end
     private :x509_certificate
 
-    def certificate_by_provider
-      if service_provider.new_cert
+    def certificate_by_options
+      if new_cert
         SamlIdp.config.new_x509_certificate
       else
         SamlIdp.config.x509_certificate
@@ -63,9 +55,5 @@ module SamlIdp
     end
     private :signature_value
 
-    def service_provider_finder
-      SamlIdp.config.service_provider.finder
-    end
-    private :service_provider_finder
   end
 end

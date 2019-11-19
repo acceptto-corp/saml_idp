@@ -22,7 +22,7 @@ module SamlIdp
           "xmlns:saml" => Saml::XML::Namespaces::ASSERTION,
           "xmlns:ds" => Saml::XML::Namespaces::SIGNATURE,
           entityID: entity_id do |entity|
-            sign entity, single_service_post_location
+            sign entity, new_cert
 
             entity.IDPSSODescriptor protocolSupportEnumeration: protocol_enumeration do |descriptor|
               build_key_descriptor descriptor
@@ -162,11 +162,6 @@ module SamlIdp
       .gsub(/-----END CERTIFICATE-----/,"")
       .gsub(/\n/, "")
     end
-
-    def service_provider_finder
-      SamlIdp.config.service_provider.finder
-    end
-    private :service_provider_finder
 
     %w[
       support_email

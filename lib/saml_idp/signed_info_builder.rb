@@ -22,13 +22,13 @@ module SamlIdp
     attr_accessor :reference_id
     attr_accessor :digest_value
     attr_accessor :raw_algorithm
-    attr_accessor :audience_uri
+    attr_accessor :new_cert
 
-    def initialize(reference_id, digest_value, raw_algorithm, audience_uri)
+    def initialize(reference_id, digest_value, raw_algorithm, new_cert)
       self.reference_id = reference_id
       self.digest_value = digest_value
       self.raw_algorithm = raw_algorithm
-      self.audience_uri = audience_uri
+      self.new_cert = new_cert
     end
 
     def raw
@@ -66,14 +66,8 @@ module SamlIdp
     end
     private :clean_algorithm_name
 
-    def service_provider
-      @_service_provider ||=
-        ServiceProvider.new((service_provider_finder[audience_uri] || {}))
-    end
-    private :service_provider
-
     def secret_key
-      if service_provider.new_cert
+      if new_cert
         SamlIdp.config.new_secret_key
       else
         SamlIdp.config.secret_key
@@ -96,10 +90,5 @@ module SamlIdp
       "#_#{reference_id}"
     end
     private :reference_string
-
-    def service_provider_finder
-      SamlIdp.config.service_provider.finder
-    end
-    private :service_provider_finder
   end
 end
