@@ -20,7 +20,7 @@ module SamlIdp
       end
     end
 
-    def sign(el, new_cert = false)
+    def sign(el, new_cert)
       el << signature(new_cert) if sign?
     end
 
