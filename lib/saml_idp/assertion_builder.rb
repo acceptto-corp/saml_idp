@@ -16,10 +16,11 @@ module SamlIdp
     attr_accessor :expiry
     attr_accessor :encryption_opts
     attr_accessor :session_expiry
+    attr_accessor :new_cert
 
     delegate :config, to: :SamlIdp
 
-    def initialize(reference_id, issuer_uri, principal, audience_uri, saml_request_id, saml_acs_url, raw_algorithm, authn_context_classref, expiry=60*60, encryption_opts=nil, session_expiry=nil)
+    def initialize(reference_id, issuer_uri, principal, audience_uri, saml_request_id, saml_acs_url, raw_algorithm, authn_context_classref, expiry=60*60, encryption_opts=nil, session_expiry=nil, new_cert)
       self.reference_id = reference_id
       self.issuer_uri = issuer_uri
       self.principal = principal
@@ -31,6 +32,7 @@ module SamlIdp
       self.expiry = expiry
       self.encryption_opts = encryption_opts
       self.session_expiry = session_expiry.nil? ? config.session_expiry : session_expiry
+      self.new_cert = new_cert
     end
 
     def fresh
@@ -40,7 +42,7 @@ module SamlIdp
         IssueInstant: now_iso,
         Version: "2.0" do |assertion|
           assertion.Issuer issuer_uri
-          sign assertion, audience_uri
+          sign assertion, new_cert
           assertion.Subject do |subject|
             subject.NameID name_id, Format: name_id_format[:name]
             subject.SubjectConfirmation Method: Saml::XML::Namespaces::Methods::BEARER do |confirmation|

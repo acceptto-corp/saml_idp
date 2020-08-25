@@ -18,6 +18,7 @@ module SamlIdp
     attr_accessor :encryption_opts
     attr_accessor :session_expiry
     attr_accessor :signed_message_opts
+    attr_accessor :new_cert
 
     def initialize(reference_id,
           response_id,
@@ -31,7 +32,8 @@ module SamlIdp
           expiry=60*60,
           encryption_opts=nil,
           session_expiry=0,
-          signed_message_opts
+          signed_message_opts,
+          new_cert
           )
       self.reference_id = reference_id
       self.response_id = response_id
@@ -48,6 +50,7 @@ module SamlIdp
       self.encryption_opts = encryption_opts
       self.session_expiry = session_expiry
       self.signed_message_opts = signed_message_opts
+      self.new_cert = new_cert
     end
 
     def build
@@ -73,7 +76,7 @@ module SamlIdp
     private :encoded_message
 
     def response_builder
-      ResponseBuilder.new(response_id, issuer_uri, saml_acs_url, saml_request_id, signed_assertion, algorithm)
+      ResponseBuilder.new(response_id, issuer_uri, saml_acs_url, saml_request_id, signed_assertion, algorithm, new_cert)
     end
     private :response_builder
 
@@ -88,7 +91,8 @@ module SamlIdp
         authn_context_classref,
         expiry,
         encryption_opts,
-        session_expiry
+        session_expiry,
+        new_cert
     end
     private :assertion_builder
   end

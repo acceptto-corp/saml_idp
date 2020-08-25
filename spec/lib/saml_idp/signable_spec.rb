@@ -5,9 +5,9 @@ class MockSignable
 
   def raw
     builder = Builder::XmlMarkup.new
-    audience_uri = ''
+    new_cert = false
     builder.body do |body|
-      sign body, audience_uri
+      sign body, new_cert
     end
   end
 

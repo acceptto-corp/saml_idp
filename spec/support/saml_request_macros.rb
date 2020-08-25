@@ -13,7 +13,8 @@ module SamlRequestMacros
       'http://example.com',
       requested_saml_logout_url,
       'some_name_id',
-      OpenSSL::Digest::SHA256
+      OpenSSL::Digest::SHA256,
+      false
     )
     Base64.strict_encode64(request_builder.signed)
   end

@@ -11,14 +11,16 @@ module SamlIdp
     attr_accessor :saml_request_id
     attr_accessor :assertion_and_signature
     attr_accessor :raw_algorithm
+    attr_accessor :new_cert
 
-    def initialize(response_id, issuer_uri, saml_acs_url, saml_request_id, assertion_and_signature, raw_algorithm)
+    def initialize(response_id, issuer_uri, saml_acs_url, saml_request_id, assertion_and_signature, raw_algorithm, new_cert)
       self.response_id = response_id
       self.issuer_uri = issuer_uri
       self.saml_acs_url = saml_acs_url
       self.saml_request_id = saml_request_id
       self.assertion_and_signature = assertion_and_signature
       self.raw_algorithm = raw_algorithm
+      self.new_cert = new_cert
     end
 
     def encoded(signed_message: false)
@@ -52,7 +54,7 @@ module SamlIdp
       builder = Builder::XmlMarkup.new
       builder.tag! "samlp:Response", resp_options do |response|
           response.Issuer issuer_uri, xmlns: Saml::XML::Namespaces::ASSERTION
-          sign response, issuer_uri
+          sign response, new_cert
           response.tag! "samlp:Status" do |status|
             status.tag! "samlp:StatusCode", Value: Saml::XML::Namespaces::Statuses::SUCCESS
           end

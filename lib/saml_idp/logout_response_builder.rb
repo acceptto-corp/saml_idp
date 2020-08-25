@@ -3,8 +3,8 @@ module SamlIdp
   class LogoutResponseBuilder < LogoutBuilder
     attr_accessor :saml_request_id
 
-    def initialize(response_id, issuer_uri, saml_slo_url, saml_request_id, algorithm)
-      super(response_id, issuer_uri, saml_slo_url, algorithm)
+    def initialize(response_id, issuer_uri, saml_slo_url, saml_request_id, algorithm, new_cert)
+      super(response_id, issuer_uri, saml_slo_url, algorithm, new_cert)
       self.saml_request_id = saml_request_id
     end
 
@@ -17,7 +17,7 @@ module SamlIdp
         InResponseTo: saml_request_id,
         xmlns: Saml::XML::Namespaces::PROTOCOL do |response|
           response.Issuer issuer_uri, xmlns: Saml::XML::Namespaces::ASSERTION
-          sign response, issuer_uri
+          sign response, new_cert
           response.Status xmlns: Saml::XML::Namespaces::PROTOCOL do |status|
             status.StatusCode Value: Saml::XML::Namespaces::Statuses::SUCCESS
           end

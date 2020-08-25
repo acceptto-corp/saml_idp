@@ -21,6 +21,10 @@ module SamlIdp
   def self.metadata
     @metadata ||= MetadataBuilder.new(config)
   end
+
+  def self.new_metadata
+    @new_metadata ||= MetadataBuilder.new(config, true)
+  end
 end
 
 # TODO Needs extraction out

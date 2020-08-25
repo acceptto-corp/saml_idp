@@ -20,8 +20,8 @@ module SamlIdp
       end
     end
 
-    def sign(el, audience_uri)
-      el << signature(audience_uri) if sign?
+    def sign(el, new_cert)
+      el << signature(new_cert) if sign?
     end
 
     def generated_reference_id
@@ -64,14 +64,14 @@ module SamlIdp
     end
     private :sign?
 
-    def signature(audience_uri)
-      SignatureBuilder.new(signed_info_builder(audience_uri), audience_uri).raw
+    def signature(new_cert)
+      SignatureBuilder.new(signed_info_builder(new_cert), new_cert).raw
     end
     private :signature
 
-    def signed_info_builder(audience_uri)
+    def signed_info_builder(new_cert)
       SignedInfoBuilder.new(
-        get_reference_id, get_digest, get_algorithm, audience_uri
+        get_reference_id, get_digest, get_algorithm, new_cert
       )
     end
     private :signed_info_builder
