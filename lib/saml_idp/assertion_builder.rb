@@ -143,7 +143,7 @@ module SamlIdp
     private :name_id_getter
 
     def name_id_format
-      @name_id_format ||= NameIdFormatter.new(config.name_id.formats).chosen
+      @name_id_format ||= NameIdFormatter.new(config.name_id.formats, name_id_attr).chosen
     end
     private :name_id_format
 
