@@ -17,10 +17,11 @@ module SamlIdp
     attr_accessor :encryption_opts
     attr_accessor :session_expiry
     attr_accessor :new_cert
+    attr_accessor :name_id_attr
 
     delegate :config, to: :SamlIdp
 
-    def initialize(reference_id, issuer_uri, principal, audience_uri, saml_request_id, saml_acs_url, raw_algorithm, authn_context_classref, expiry=60*60, encryption_opts=nil, session_expiry=nil, new_cert)
+    def initialize(reference_id, issuer_uri, principal, audience_uri, saml_request_id, saml_acs_url, raw_algorithm, authn_context_classref, expiry=60*60, encryption_opts=nil, session_expiry=nil, new_cert, name_id_attr)
       self.reference_id = reference_id
       self.issuer_uri = issuer_uri
       self.principal = principal
@@ -33,6 +34,7 @@ module SamlIdp
       self.encryption_opts = encryption_opts
       self.session_expiry = session_expiry.nil? ? config.session_expiry : session_expiry
       self.new_cert = new_cert
+      self.name_id_attr = name_id_attr
     end
 
     def fresh

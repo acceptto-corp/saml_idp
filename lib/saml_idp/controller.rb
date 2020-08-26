@@ -64,6 +64,7 @@ module SamlIdp
       encryption_opts = opts[:encryption] || nil
       signed_message_opts = opts[:signed_message] || false
       new_cert = opts[:new_cert] || false
+      name_id_attr = opts[:name_id_attr] || nil
 
       SamlResponse.new(
         reference_id,
@@ -79,7 +80,8 @@ module SamlIdp
         encryption_opts,
         session_expiry,
         signed_message_opts,
-        new_cert
+        new_cert,
+        name_id_attr
       ).build
     end
 

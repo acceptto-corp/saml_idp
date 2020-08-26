@@ -1,8 +1,11 @@
 module SamlIdp
   class NameIdFormatter
     attr_accessor :list
-    def initialize(list)
+    attr_accessor :name_id_attr
+
+    def initialize(list, name_id_attr = nil)
       self.list = (list || {})
+      self.name_id_attr = name_id_attr
     end
 
     def all
@@ -15,7 +18,9 @@ module SamlIdp
     end
 
     def chosen
-      if split?
+      if name_id_attr
+        build("2.0", name_id_attr.first)
+      elsif split?
         version, choose = "1.1", one_one.first
         version, choose = "2.0", two_zero.first unless choose
         version, choose = "2.0", "persistent" unless choose
