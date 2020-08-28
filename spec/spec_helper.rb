@@ -17,7 +17,6 @@ require 'capybara/rails'
 require 'ruby-saml'
 require 'saml_idp'
 require 'timecop'
-require 'byebug'
 
 Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f}
 
@@ -50,4 +49,3 @@ SamlIdp::Default::SERVICE_PROVIDER[:metadata_url] = 'https://example.com/meta'
 SamlIdp::Default::SERVICE_PROVIDER[:response_hosts] = ['foo.example.com']
 SamlIdp::Default::SERVICE_PROVIDER[:assertion_consumer_logout_service_url] = 'https://foo.example.com/saml/logout'
 Capybara.default_host = "https://app.example.com"
-Capybara.app_host = "https://app.example.com"
