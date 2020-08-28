@@ -33,8 +33,11 @@ module SamlIdp
       end.new(nil)
     end
 
-    def validate_saml_request(raw_saml_request = params[:SAMLRequest])
-      decode_request(raw_saml_request)
+    def validate_saml_request(opts = {})
+      raw_saml_request = opts[:raw_saml_request] || params[:SAMLRequest]
+      config = opts[:config] || SamlIdp.config
+
+      decode_request(raw_saml_request, config)
       return true if valid_saml_request?
       if defined?(::Rails)
         if Rails::VERSION::MAJOR >= 4
@@ -46,8 +49,8 @@ module SamlIdp
       false
     end
 
-    def decode_request(raw_saml_request)
-      @saml_request = Request.from_deflated_request(raw_saml_request)
+    def decode_request(raw_saml_request, config)
+      @saml_request = Request.from_deflated_request(raw_saml_request, config)
     end
 
     def authn_context_classref
@@ -64,6 +67,7 @@ module SamlIdp
       expiry = opts[:expiry] || 60*60
       session_expiry = opts[:session_expiry]
       encryption_opts = opts[:encryption] || nil
+      config = opts[:config] || SamlIdp.config
 
       SamlResponse.new(
         reference_id,
@@ -77,7 +81,8 @@ module SamlIdp
         my_authn_context_classref,
         expiry,
         encryption_opts,
-        session_expiry
+        session_expiry,
+        config
       ).build
     end
 
@@ -87,7 +92,8 @@ module SamlIdp
         (opts[:issuer_uri] || issuer_uri),
         saml_logout_url,
         saml_request_id,
-        (opts[:algorithm] || algorithm || default_algorithm)
+        (opts[:algorithm] || algorithm || default_algorithm),
+        config = opts[:config] || SamlIdp.config
       ).signed
     end
 
@@ -101,7 +107,7 @@ module SamlIdp
       end
     end
 
-    def issuer_uri
+    def issuer_uri #check back this needs to get the correct issuer
       (SamlIdp.config.base_saml_location.present? && SamlIdp.config.base_saml_location) ||
         (defined?(request) && request.url.to_s.split("?").first) ||
         "http://example.com"

@@ -2,7 +2,7 @@ require 'saml_idp/xml_security'
 require 'saml_idp/service_provider'
 module SamlIdp
   class Request
-    def self.from_deflated_request(raw)
+    def self.from_deflated_request(raw, config)
       if raw
         decoded = Base64.decode64(raw)
         zstream = Zlib::Inflate.new(-Zlib::MAX_WBITS)
@@ -17,18 +17,18 @@ module SamlIdp
       else
         inflated = ""
       end
-      new(inflated)
+      new(inflated, config)
     end
 
     attr_accessor :raw_xml
+    attr_accessor :config
 
-    delegate :config, to: :SamlIdp
-    private :config
     delegate :xpath, to: :document
     private :xpath
 
-    def initialize(raw_xml = "")
+    def initialize(raw_xml = "", config)
       self.raw_xml = raw_xml
+      self.config = config
     end
 
     def logout_request?
@@ -125,7 +125,7 @@ module SamlIdp
 
     def service_provider
       return unless issuer.present?
-      @_service_provider ||= ServiceProvider.new((service_provider_finder[issuer] || {}).merge(identifier: issuer))
+      @_service_provider ||= ServiceProvider.new((service_provider_finder[issuer] || {}).merge(identifier: issuer), config)
     end
 
     def issuer

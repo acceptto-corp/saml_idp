@@ -2,8 +2,11 @@ module SamlIdp
   module Attributeable
     extend ActiveSupport::Concern
 
-    def initialize(attributes = {})
+    attr_accessor :config
+
+    def initialize(attributes = {}, config)
       self.attributes = attributes
+      self.config = config
     end
 
     def attributes

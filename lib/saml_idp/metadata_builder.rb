@@ -6,10 +6,10 @@ module SamlIdp
   class MetadataBuilder
     include Algorithmable
     include Signable
-    attr_accessor :configurator
+    attr_accessor :config
 
-    def initialize(configurator = SamlIdp.config)
-      self.configurator = configurator
+    def initialize(config = SamlIdp.config)
+      self.config = config
     end
 
     def fresh
@@ -109,7 +109,7 @@ module SamlIdp
     private :reference_string
 
     def entity_id
-      configurator.entity_id.presence || configurator.base_saml_location
+      config.entity_id.presence || config.base_saml_location
     end
     private :entity_id
 
@@ -119,7 +119,7 @@ module SamlIdp
     private :protocol_enumeration
 
     def attributes
-      @attributes ||= configurator.attributes.inject([]) do |list, (key, opts)|
+      @attributes ||= config.attributes.inject([]) do |list, (key, opts)|
         opts[:friendly_name] = key
         list << AttributeDecorator.new(opts)
         list
@@ -128,12 +128,12 @@ module SamlIdp
     private :attributes
 
     def name_id_formats
-      @name_id_formats ||= NameIdFormatter.new(configurator.name_id.formats).all
+      @name_id_formats ||= NameIdFormatter.new(config.name_id.formats).all
     end
     private :name_id_formats
 
     def raw_algorithm
-      configurator.algorithm
+      config.algorithm
     end
     private :raw_algorithm
 
@@ -156,7 +156,7 @@ module SamlIdp
       technical_contact
     ].each do |delegatable|
       define_method(delegatable) do
-        configurator.public_send delegatable
+        config.public_send delegatable
       end
       private delegatable
     end

@@ -15,8 +15,6 @@ module SamlIdp
     attribute :assertion_consumer_logout_service_url
     attribute :response_hosts
 
-    delegate :config, to: :SamlIdp
-
     def valid?
       attributes.present?
     end
