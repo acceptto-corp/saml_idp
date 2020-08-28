@@ -23,7 +23,8 @@ module SamlIdp
         issuer_uri,
         saml_slo_url,
         name_id,
-        algorithm
+        algorithm,
+        SamlIdp.config
       )
     end
 

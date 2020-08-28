@@ -16,6 +16,7 @@ module SamlIdp
     let(:saml_slo_url) { 'http://localhost:3000/saml/logout' }
     let(:request_id) { 'some_request_id' }
     let(:algorithm) { OpenSSL::Digest::SHA256 }
+    let(:config) { SamlIdp.config }
 
     subject do
       described_class.new(
@@ -23,7 +24,8 @@ module SamlIdp
         issuer_uri,
         saml_slo_url,
         request_id,
-        algorithm
+        algorithm,
+        config
       )
     end
 

@@ -21,6 +21,10 @@ class MockSignable
   def algorithm
     OpenSSL::Digest::SHA1
   end
+
+  def config
+    SamlIdp.config
+  end
 end
 
 module SamlIdp

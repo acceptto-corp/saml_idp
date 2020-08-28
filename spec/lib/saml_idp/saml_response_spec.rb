@@ -35,7 +35,8 @@ module SamlIdp
                                   authn_context_classref,
                                   expiry,
                                   encryption_opts,
-                                  session_expiry
+                                  session_expiry,
+                                  SamlIdp.config
                                  )
     }
 
@@ -50,7 +51,8 @@ module SamlIdp
                                   authn_context_classref,
                                   expiry,
                                   nil,
-                                  session_expiry
+                                  session_expiry,
+                                  SamlIdp.config
                                  )
     }
 

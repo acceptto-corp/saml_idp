@@ -7,7 +7,8 @@ module SamlIdp
     subject { described_class.new(
       reference_id,
       digest,
-      algorithm
+      algorithm,
+      SamlIdp.config
     ) }
 
     before do

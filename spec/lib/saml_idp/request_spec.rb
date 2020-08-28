@@ -6,21 +6,21 @@ module SamlIdp
     describe "deflated request" do
       let(:deflated_request) { Base64.encode64(Zlib::Deflate.deflate(raw_authn_request, 9)[2..-5]) }
 
-      subject { described_class.from_deflated_request deflated_request }
+      subject { described_class.from_deflated_request deflated_request, SamlIdp.config }
 
       it "inflates" do
         expect(subject.request_id).to eq("_af43d1a0-e111-0130-661a-3c0754403fdb")
       end
 
       it "handles invalid SAML" do
-        req = described_class.from_deflated_request "bang!"
+        req = described_class.from_deflated_request "bang!", SamlIdp.config
         expect(req.valid?).to eq(false)
       end
     end
 
     describe "authn request" do
-      subject { described_class.new raw_authn_request }
-
+      subject { described_class.new raw_authn_request, SamlIdp.config }
+      
       it "has a valid request_id" do
         expect(subject.request_id).to eq("_af43d1a0-e111-0130-661a-3c0754403fdb")
       end
@@ -73,7 +73,7 @@ module SamlIdp
     describe "logout request" do
       let(:raw_logout_request) { "<LogoutRequest ID='_some_response_id' Version='2.0' IssueInstant='2010-06-01T13:00:00Z' Destination='http://localhost:3000/saml/logout' xmlns='urn:oasis:names:tc:SAML:2.0:protocol'><Issuer xmlns='urn:oasis:names:tc:SAML:2.0:assertion'>http://example.com</Issuer><NameID xmlns='urn:oasis:names:tc:SAML:2.0:assertion' Format='urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'>some_name_id</NameID><SessionIndex>abc123index</SessionIndex></LogoutRequest>" }
 
-      subject { described_class.new raw_logout_request }
+      subject { described_class.new raw_logout_request, SamlIdp.config }
 
       it "has a valid request_id" do
         expect(subject.request_id).to eq('_some_response_id')

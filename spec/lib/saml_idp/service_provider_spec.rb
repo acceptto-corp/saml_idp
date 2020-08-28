@@ -1,7 +1,7 @@
 require 'spec_helper'
 module SamlIdp
   describe ServiceProvider do
-    subject { described_class.new attributes }
+    subject { described_class.new attributes, SamlIdp.config }
     let(:attributes) { {} }
 
     it { should respond_to :fingerprint }
